@@ -1,0 +1,45 @@
+# Working-title Plymouth theme: dark background, thin accent progress line.
+Window.SetBackgroundTopColor(0.0431, 0.0549, 0.0784);
+Window.SetBackgroundBottomColor(0.0431, 0.0549, 0.0784);
+
+W = Window.GetWidth();
+H = Window.GetHeight();
+bar_w = W * 0.2;
+if (bar_w < 240) bar_w = 240;
+bar_h = 2;
+bar_x = (W - bar_w) / 2;
+bar_y = H * 0.55;
+
+track_img = Image("track.png");
+fill_img = Image("fill.png");
+
+track = Sprite(track_img.Scale(bar_w, bar_h));
+track.SetPosition(bar_x, bar_y, 1);
+fill = Sprite(fill_img.Scale(1, bar_h));
+fill.SetPosition(bar_x, bar_y, 2);
+
+fun progress_cb(time, progress) {
+    w = bar_w * progress;
+    if (w < 1) w = 1;
+    fill.SetImage(fill_img.Scale(w, bar_h));
+}
+Plymouth.SetBootProgressFunction(progress_cb);
+
+# Disk-encryption password prompt (LUKS)
+prompt_sprite = Sprite();
+fun password_cb(prompt, bullets) {
+    stars = "";
+    for (i = 0; i < bullets; i++) stars = stars + "*";
+    img = Image.Text(prompt + "  " + stars, 0.9020, 0.9176, 0.9490, 1, "Sans 14");
+    prompt_sprite.SetImage(img);
+    prompt_sprite.SetPosition((W - img.GetWidth()) / 2, H * 0.62, 3);
+}
+Plymouth.SetDisplayPasswordFunction(password_cb);
+
+msg_sprite = Sprite();
+fun message_cb(text) {
+    img = Image.Text(text, 0.6039, 0.6510, 0.7373, 1, "Sans 12");
+    msg_sprite.SetImage(img);
+    msg_sprite.SetPosition((W - img.GetWidth()) / 2, H * 0.7, 3);
+}
+Plymouth.SetMessageFunction(message_cb);

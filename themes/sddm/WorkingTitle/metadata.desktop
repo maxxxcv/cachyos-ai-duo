@@ -1,0 +1,9 @@
+[SddmGreeterTheme]
+Name=WorkingTitle
+Description=Dark, sharp login screen
+Author=
+Version=0.1
+MainScript=Main.qml
+ConfigFile=theme.conf
+Theme-Id=WorkingTitle
+QtVersion=6

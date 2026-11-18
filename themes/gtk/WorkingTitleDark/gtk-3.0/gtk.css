@@ -1,0 +1,39 @@
+/* Generated from design-tokens.json. Works with libadwaita (GTK4) and Adwaita (GTK3.24+). */
+@define-color accent_color #00E0FF;
+@define-color accent_bg_color #00E0FF;
+@define-color accent_fg_color #04121A;
+@define-color destructive_color #FF6B7A;
+@define-color destructive_bg_color #FF6B7A;
+@define-color destructive_fg_color #0B0E14;
+@define-color success_color #3DDC97;
+@define-color success_bg_color #3DDC97;
+@define-color success_fg_color #0B0E14;
+@define-color warning_color #FFB020;
+@define-color warning_bg_color #FFB020;
+@define-color warning_fg_color #0B0E14;
+@define-color error_color #FF6B7A;
+@define-color error_bg_color #FF6B7A;
+@define-color error_fg_color #0B0E14;
+@define-color window_bg_color #121722;
+@define-color window_fg_color #E6EAF2;
+@define-color view_bg_color #0B0E14;
+@define-color view_fg_color #E6EAF2;
+@define-color headerbar_bg_color #0B0E14;
+@define-color headerbar_fg_color #E6EAF2;
+@define-color headerbar_border_color #2A3347;
+@define-color headerbar_backdrop_color #121722;
+@define-color sidebar_bg_color #0B0E14;
+@define-color sidebar_fg_color #E6EAF2;
+@define-color sidebar_backdrop_color #121722;
+@define-color sidebar_border_color #2A3347;
+@define-color card_bg_color #1A2132;
+@define-color card_fg_color #E6EAF2;
+@define-color dialog_bg_color #121722;
+@define-color dialog_fg_color #E6EAF2;
+@define-color popover_bg_color #1A2132;
+@define-color popover_fg_color #E6EAF2;
+@define-color shade_color rgba(0,0,0,0.36);
+@define-color scrollbar_outline_color #2A3347;
+
+/* Sharp look: small radii (token radius.md = 4px) */
+button, entry, .card, popover > contents, window.dialog { border-radius: 4px; }

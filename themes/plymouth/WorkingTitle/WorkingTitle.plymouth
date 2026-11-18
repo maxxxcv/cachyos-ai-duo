@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=WorkingTitle
+Description=Dark, minimal boot splash
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/WorkingTitle
+ScriptFile=/usr/share/plymouth/themes/WorkingTitle/WorkingTitle.script
