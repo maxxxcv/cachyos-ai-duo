@@ -7,7 +7,7 @@
 | Search over your files (nomic-embed-text) | Model is pulled; no indexer is built yet. |
 | Use the second computer for LLMs | `enable-remote-worker.sh` (whole-model offload, not layer splitting). Not run yet. |
 | Assistant (OpenClaw) | `setup-assistant.sh`: npm install, local Ollama, no email/calendar/browser/voice yet | Prepared, not run |
-| Switch models | `aimodel list|use|pull|ask|status` and `profiles.conf` | Prepared, not run |
+| Switch models | `aimodel` (list, use, pull, ask, status) and `profiles.conf` | Prepared, not run |
 | Images | NOT built yet. Plan: stable-diffusion.cpp, same engine as video. |
 | Video | In progress in `video-gen/` (baseline files downloaded, no clip generated yet). |
 
