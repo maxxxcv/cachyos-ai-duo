@@ -12,8 +12,8 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Shell syntax and shellcheck
         run: |
-          for f in twopc/*.sh ai/*.sh; do bash -n "$f"; done
-          shellcheck -S warning twopc/*.sh ai/*.sh
+          for f in install.sh twopc/*.sh ai/*.sh desktop/*.sh; do bash -n "$f"; done
+          shellcheck -S warning install.sh twopc/*.sh ai/*.sh desktop/*.sh
       - name: PowerShell syntax
         shell: pwsh
         run: |

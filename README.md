@@ -14,3 +14,4 @@ Not included: the CachyOS ISO (get it from the official mirror and verify its sh
 
 - `ai/` - local AI stack (Ollama + opencode agent), see `ai/README.md` for what is and is not built
 - `tests/` and `.github/workflows/ci.yml` - structure/contrast tests, shellcheck and PowerShell syntax check on every push
+- `install.sh a|b` - one command after installing CachyOS: pairing, browser desktop (`desktop/`), themes, AI stack

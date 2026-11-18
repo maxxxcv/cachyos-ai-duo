@@ -139,6 +139,16 @@ class Scripts(unittest.TestCase):
              if l.strip() and not l.startswith('#')]
         self.assertTrue(m)
 
+    def test_firefox_policy(self):
+        pol = json.loads(read('desktop', 'firefox-policies.json'))['policies']
+        self.assertTrue(pol['DisableTelemetry'])
+        self.assertTrue(pol['Preferences']['media.ffmpeg.vaapi.enabled']['Value'])
+
+    def test_install_runs_every_step(self):
+        s = read('install.sh')
+        for k in ['setup-pair.sh', 'setup-desktop.sh', 'install-themes.sh', 'setup-ai.sh']:
+            self.assertIn(k, s)
+
     def test_ollama_local_only_by_default(self):
         self.assertIn('OLLAMA_HOST=127.0.0.1:11434', read('ai', 'setup-ai.sh'))
 
