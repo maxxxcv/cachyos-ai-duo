@@ -1,0 +1,16 @@
+[Unit]
+Description=First-boot setup (AI duo)
+After=network-online.target NetworkManager.service
+Wants=network-online.target
+ConditionPathExists=!/run/archiso
+ConditionPathExists=!/var/lib/ai-duo/done
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/lib/ai-duo/firstboot/firstboot.sh
+TimeoutStartSec=infinity
+Restart=on-failure
+RestartSec=120
+
+[Install]
+WantedBy=multi-user.target

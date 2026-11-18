@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Shows the first-boot setup progress in a terminal window until setup is finished. Starts at login.
+[ -d /run/archiso ] && exit 0
+[ -e /var/lib/ai-duo/done ] && exit 0
+exec konsole --hold -e bash -c '
+echo "המערכת מסיימת להגדיר את עצמה (הורדת חבילות ומודלים). אפשר להמשיך לעבוד, ולא לכבות את המחשב."
+echo "System is finishing its setup (downloading packages and AI models). You can keep working; do not shut down."
+echo "-----"
+tail -n 200 -f /var/log/ai-duo-firstboot.log'

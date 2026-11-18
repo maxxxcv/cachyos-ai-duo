@@ -13,7 +13,8 @@ sync_pacman_once
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
 echo "== 1/5 Node.js (OpenClaw needs Node 24.16+ or 26.1+) =="
-sudo pacman -S --needed --noconfirm nodejs npm
+# nodejs-lts-krypton (Node 24 LTS): the plain nodejs package was broken on 2026-11-18 (links an older simdjson)
+sudo pacman -S --needed --noconfirm nodejs-lts-krypton npm
 node -v
 
 echo "== 2/5 install OpenClaw for this user (no root, no curl|bash) =="

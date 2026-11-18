@@ -170,6 +170,21 @@ class Scripts(unittest.TestCase):
                   'ai/setup-ai.sh', 'ai/setup-assistant.sh', 'ai/enable-remote-worker.sh']:
             self.assertIn('require_installed_system', read(*f.split('/')), f)
 
+    def test_node_is_the_lts_package(self):
+        for f in (('iso', 'firstboot', 'firstboot.sh'), ('ai', 'setup-assistant.sh')):
+            self.assertIn('nodejs-lts-krypton', read(*f))
+
+    def test_iso_first_boot_is_safe(self):
+        svc = read('iso', 'overlay', 'etc', 'systemd', 'system', 'ai-duo-firstboot.service')
+        self.assertIn('ConditionPathExists=!/run/archiso', svc)
+        fb = read('iso', 'firstboot', 'firstboot.sh')
+        self.assertIn('/run/archiso', fb)
+        self.assertIn('avx512f', fb)
+        build = read('iso', 'build-iso.sh')
+        self.assertIn('settings_offline.conf', build)
+        self.assertIn('-boot_image any replay', build)
+        self.assertNotIn('pacman -S', build)
+
     def test_ollama_local_only_by_default(self):
         self.assertIn('OLLAMA_HOST=127.0.0.1:11434', read('ai', 'setup-ai.sh'))
 

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=System setup progress
+Exec=/usr/local/bin/ai-duo-progress
+Terminal=false
+X-KDE-autostart-after=panel

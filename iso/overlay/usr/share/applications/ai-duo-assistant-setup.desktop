@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Set up my AI assistant (Telegram)
+Name[he]=הגדרת העוזר האישי (טלגרם)
+Comment=One-time setup of the local assistant. Needs a Telegram bot token from @BotFather if you want Telegram.
+Exec=konsole -e bash -lc 'openclaw onboard --install-daemon; echo; read -r -p "Press Enter to close"'
+Icon=utilities-terminal
+Categories=Utility;
+Terminal=false

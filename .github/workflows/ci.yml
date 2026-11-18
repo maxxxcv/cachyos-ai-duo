@@ -12,8 +12,8 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Shell syntax and shellcheck
         run: |
-          for f in install.sh lib.sh twopc/*.sh ai/*.sh ai/aimodel desktop/*.sh; do bash -n "$f"; done
-          shellcheck -S warning install.sh lib.sh twopc/*.sh ai/*.sh ai/aimodel desktop/*.sh
+          for f in install.sh lib.sh iso/build-iso.sh iso/firstboot/*.sh iso/overlay/usr/local/bin/ai-duo-progress twopc/*.sh ai/*.sh ai/aimodel desktop/*.sh; do bash -n "$f"; done
+          shellcheck -S warning install.sh lib.sh iso/build-iso.sh iso/firstboot/*.sh iso/overlay/usr/local/bin/ai-duo-progress twopc/*.sh ai/*.sh ai/aimodel desktop/*.sh
       - name: PowerShell syntax
         shell: pwsh
         run: |
