@@ -149,6 +149,22 @@ class Scripts(unittest.TestCase):
         for k in ['setup-pair.sh', 'setup-desktop.sh', 'install-themes.sh', 'setup-ai.sh']:
             self.assertIn(k, s)
 
+    def test_profiles_use_listed_models(self):
+        models = {l.strip() for l in open(p('ai', 'models.conf'), encoding='utf-8') if l.strip() and not l.startswith('#')}
+        for l in open(p('ai', 'profiles.conf'), encoding='utf-8'):
+            if l.strip() and not l.startswith('#'):
+                name, model, host = l.strip().split('|')
+                self.assertIn(model, models, name)
+
+    def test_assistant_installed_by_install_sh(self):
+        self.assertIn('setup-assistant.sh', read('install.sh'))
+
+    def test_assistant_uses_native_ollama_api(self):
+        s = read('ai', 'setup-assistant.sh')
+        self.assertNotIn('11434/v1', s)
+        code = [l for l in s.splitlines() if not l.lstrip().startswith(('#', 'echo'))]
+        self.assertFalse(any(re.search(r'curl[^|]*\|\s*(ba)?sh', l) for l in code))
+
     def test_ollama_local_only_by_default(self):
         self.assertIn('OLLAMA_HOST=127.0.0.1:11434', read('ai', 'setup-ai.sh'))
 

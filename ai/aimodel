@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+# aimodel: switch between local AI models (and between this PC and the other PC) for the whole system.
+#   aimodel list                 show profiles and installed models
+#   aimodel use <profile|model>  make it the default for the assistant (OpenClaw) and the code agent (opencode)
+#   aimodel ask <profile> "..."  one quick question to a profile (tests that it works)
+#   aimodel pull <profile|model> download a model
+#   aimodel status               what is active now
+# Profiles live in ~/.config/ai-duo/profiles.conf (copied from ai/profiles.conf on first run).
+set -euo pipefail
+CONF_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/ai-duo"
+PROFILES="$CONF_DIR/profiles.conf"
+CURRENT="$CONF_DIR/current"
+mkdir -p "$CONF_DIR"
+if [ ! -f "$PROFILES" ]; then
+  SRC="$(dirname "$(readlink -f "$0")")/profiles.conf"
+  [ -f "$SRC" ] && cp "$SRC" "$PROFILES" || { echo "profiles.conf not found"; exit 1; }
+fi
+
+resolve() {  # prints "model host" for a profile name or a raw model name
+  local key="$1" line
+  line=$(grep -E "^${key}\|" "$PROFILES" | head -1 || true)
+  if [ -n "$line" ]; then
+    IFS='|' read -r _ model host <<<"$line"
+    echo "$model ${host:-local}"
+  else
+    echo "$key local"
+  fi
+}
+host_url() { [ "$1" = local ] && echo "http://127.0.0.1:11434" || echo "http://$1:11434"; }
+ollama_at() { local h="$1"; shift; OLLAMA_HOST="$(host_url "$h" | sed 's#http://##')" ollama "$@"; }
+
+cmd="${1:-status}"; shift || true
+case "$cmd" in
+  list)
+    echo "Profiles:"; grep -vE '^\s*(#|$)' "$PROFILES" | awk -F'|' '{printf "  %-8s %-22s %s\n",$1,$2,$3}'
+    echo; echo "Installed on this PC:"; ollama list 2>/dev/null | sed 's/^/  /' || echo "  (ollama not running)"
+    ;;
+  pull)
+    read -r model host < <(resolve "${1:?profile or model}")
+    ollama_at "$host" pull "$model"
+    ;;
+  use)
+    read -r model host < <(resolve "${1:?profile or model}")
+    if ! ollama_at "$host" list 2>/dev/null | awk 'NR>1{print $1}' | grep -qx "$model"; then
+      echo "Model $model is not installed on $host. Run: aimodel pull $1"; exit 1
+    fi
+    echo "$model $host" > "$CURRENT"
+    # Assistant (OpenClaw): per its docs, models are set with 'openclaw models set ollama/<model>'.
+    if command -v openclaw >/dev/null; then
+      openclaw config set models.providers.ollama.baseUrl "$(host_url "$host")" >/dev/null
+      openclaw models set "ollama/$model"
+    else
+      echo "(OpenClaw is not installed; skipped)"
+    fi
+    # Code agent (opencode): local models only.
+    if [ "$host" = local ] && [ -f "$HOME/.config/opencode/opencode.json" ]; then
+      python3 - "$model" <<'PY'
+import json, os, sys
+p = os.path.expanduser('~/.config/opencode/opencode.json')
+d = json.load(open(p))
+d['model'] = 'ollama/' + sys.argv[1]
+json.dump(d, open(p, 'w'), indent=2)
+PY
+    elif [ "$host" != local ]; then
+      echo "(opencode keeps using the local model; remote models are used by the assistant only)"
+    fi
+    echo "Active: $model on $host"
+    ;;
+  ask)
+    read -r model host < <(resolve "${1:?profile}"); shift
+    ollama_at "$host" run "$model" "$*"
+    ;;
+  status)
+    if [ -f "$CURRENT" ]; then echo "Active: $(cat "$CURRENT")"; else echo "No model selected yet. Try: aimodel list, then aimodel use chat"; fi
+    ;;
+  *) echo "usage: aimodel list | use <profile|model> | pull <profile|model> | ask <profile> \"text\" | status"; exit 1;;
+esac

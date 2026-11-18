@@ -47,6 +47,8 @@ bash install.sh b     # on the second PC (also serves AI models to A)
 | Browsing | Firefox with hardware video decoding, no telemetry, uBlock Origin, Hebrew fonts | Prepared, not run |
 | Two-PC link | Names the PCs `pc-a` and `pc-b`, finds them over the cable with no IP setup, firewall on wired links only | Prepared, not run |
 | Chat and code | Ollama and the opencode agent, models `qwen2.5-coder:7b` and `qwen3:8b`, local only | Prepared, not run |
+| Assistant ("Jarvis") | OpenClaw installed from npm, using the local Ollama models; Telegram optional via onboarding; email, calendar, browser and voice are opt-in | Prepared, not run |
+| Model switching | `aimodel use chat|code|fast|big` switches the assistant and code agent between models, and between this PC and the other | Prepared, not run |
 | Images | Planned (stable-diffusion.cpp) | Not built |
 | Video | Wan 2.2 5B via stable-diffusion.cpp on both PCs | In progress, no clip generated yet |
 

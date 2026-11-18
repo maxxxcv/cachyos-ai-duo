@@ -11,5 +11,7 @@ bash "$HERE/twopc/setup-pair.sh" "$ROLE"
 bash "$HERE/desktop/setup-desktop.sh"
 bash "$HERE/desktop/install-themes.sh"
 bash "$HERE/ai/setup-ai.sh"
+bash "$HERE/ai/setup-assistant.sh"
 if [ "$ROLE" = b ]; then bash "$HERE/ai/enable-remote-worker.sh"; fi
+echo "Last step, once, it asks you questions: openclaw onboard --install-daemon"
 echo "All done. Reboot, then run: bash twopc/pair-status.sh"
