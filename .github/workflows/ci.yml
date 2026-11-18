@@ -1,0 +1,22 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Python tests (structure, contrast, reproducible builds)
+        run: python -m unittest discover -s tests -v
+      - name: Shell syntax and shellcheck
+        run: |
+          for f in twopc/*.sh ai/*.sh; do bash -n "$f"; done
+          shellcheck -S warning twopc/*.sh ai/*.sh
+      - name: PowerShell syntax
+        shell: pwsh
+        run: |
+          $errs = $null; $tok = $null
+          [System.Management.Automation.Language.Parser]::ParseFile("$PWD/write_usb.ps1", [ref]$tok, [ref]$errs) | Out-Null
+          if ($errs.Count) { $errs; exit 1 }

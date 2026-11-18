@@ -11,3 +11,6 @@ Working-title theme set and two-computer pairing scripts for a CachyOS (Arch) + 
 
 Status: structure-checked only. Nothing here has been run on Linux or on real hardware yet.
 Not included: the CachyOS ISO (get it from the official mirror and verify its sha256).
+
+- `ai/` - local AI stack (Ollama + opencode agent), see `ai/README.md` for what is and is not built
+- `tests/` and `.github/workflows/ci.yml` - structure/contrast tests, shellcheck and PowerShell syntax check on every push

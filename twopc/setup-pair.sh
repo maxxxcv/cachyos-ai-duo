@@ -31,17 +31,32 @@ sudo nmcli connection add type ethernet con-name pair-wired autoconnect yes \
   802-3-ethernet.mtu 1500 >/dev/null
 
 echo "== 5/6 firewall: pair ports only on the wired link =="
-sudo tee /etc/nftables.d-pair.nft >/dev/null <<NFT
+sudo mkdir -p /etc/pair
+sudo tee /etc/pair/pair.nft >/dev/null <<NFT
+table inet pair
+delete table inet pair
 table inet pair {
   chain input {
     type filter hook input priority -10; policy accept;
     # RPC worker (50052) and iperf3 (5201): wired interfaces only, never Wi-Fi.
-    iifname != "en*" tcp dport { 50052, 5201 } drop
+    iifname != "lo" iifname != "en*" tcp dport { 50052, 5201, 11434 } drop
   }
 }
 NFT
-sudo nft -f /etc/nftables.d-pair.nft || echo "nft rule not loaded (check manually)"
-sudo mkdir -p /etc/pair
+sudo nft -f /etc/pair/pair.nft || echo "nft rule not loaded (check manually)"
+sudo tee /etc/systemd/system/pair-firewall.service >/dev/null <<UNIT
+[Unit]
+Description=Pair ports only on wired links
+After=network-pre.target
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/nft -f /etc/pair/pair.nft
+[Install]
+WantedBy=multi-user.target
+UNIT
+sudo systemctl daemon-reload
+sudo systemctl enable pair-firewall.service
 
 echo "== 6/6 link test =="
 bash "$(dirname "$0")/pair-status.sh" || true
