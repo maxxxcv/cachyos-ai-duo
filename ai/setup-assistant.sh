@@ -6,6 +6,10 @@
 # Install method follows the OpenClaw docs (npm, not 'curl | bash'). Not yet tested on hardware.
 set -euo pipefail
 [ "$(id -u)" -ne 0 ] || { echo "Run as a normal user (the script uses sudo)."; exit 1; }
+# shellcheck source=/dev/null
+. "$(dirname "$0")/../lib.sh"
+require_installed_system
+sync_pacman_once
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
 echo "== 1/5 Node.js (OpenClaw needs Node 24.16+ or 26.1+) =="

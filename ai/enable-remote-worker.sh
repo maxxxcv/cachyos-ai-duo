@@ -5,6 +5,9 @@
 # Security: listens on all interfaces but the firewall (setup-pair.sh) drops port 11434 on non-wired links.
 # Anyone on the same wired network can reach it, so use only a private network or a direct cable.
 set -euo pipefail
+# shellcheck source=/dev/null
+. "$(dirname "$0")/../lib.sh"
+require_installed_system
 sudo mkdir -p /etc/systemd/system/ollama.service.d
 sudo tee /etc/systemd/system/ollama.service.d/remote.conf >/dev/null <<UNIT
 [Service]

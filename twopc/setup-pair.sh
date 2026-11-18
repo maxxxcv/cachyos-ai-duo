@@ -7,6 +7,10 @@ set -euo pipefail
 ROLE="${1:-}"
 case "$ROLE" in a|b) ;; *) echo "usage: bash setup-pair.sh a|b"; exit 1;; esac
 [ "$(id -u)" -ne 0 ] || { echo "Run as a normal user (the script uses sudo)."; exit 1; }
+# shellcheck source=/dev/null
+. "$(dirname "$0")/../lib.sh"
+require_installed_system
+sync_pacman_once
 PEER=$([ "$ROLE" = a ] && echo b || echo a)
 
 echo "== 1/6 packages =="

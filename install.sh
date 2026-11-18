@@ -7,6 +7,10 @@ set -euo pipefail
 ROLE="${1:-}"
 case "$ROLE" in a|b) ;; *) echo "usage: bash install.sh a|b"; exit 1;; esac
 HERE="$(cd "$(dirname "$0")" && pwd)"
+# shellcheck source=/dev/null
+. "$HERE/lib.sh"
+require_installed_system
+sync_pacman_once
 bash "$HERE/twopc/setup-pair.sh" "$ROLE"
 bash "$HERE/desktop/setup-desktop.sh"
 bash "$HERE/desktop/install-themes.sh"

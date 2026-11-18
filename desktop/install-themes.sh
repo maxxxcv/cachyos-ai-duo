@@ -3,6 +3,9 @@
 # Run as a normal user from the repo folder. Not yet tested on a real Plasma session.
 set -euo pipefail
 [ "$(id -u)" -ne 0 ] || { echo "Run as a normal user (the script uses sudo)."; exit 1; }
+# shellcheck source=/dev/null
+. "$(dirname "$0")/../lib.sh"
+require_installed_system
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 echo "== KDE color schemes =="

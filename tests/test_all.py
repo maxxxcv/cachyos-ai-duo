@@ -165,6 +165,11 @@ class Scripts(unittest.TestCase):
         code = [l for l in s.splitlines() if not l.lstrip().startswith(('#', 'echo'))]
         self.assertFalse(any(re.search(r'curl[^|]*\|\s*(ba)?sh', l) for l in code))
 
+    def test_scripts_refuse_live_session(self):
+        for f in ['install.sh', 'twopc/setup-pair.sh', 'desktop/setup-desktop.sh', 'desktop/install-themes.sh',
+                  'ai/setup-ai.sh', 'ai/setup-assistant.sh', 'ai/enable-remote-worker.sh']:
+            self.assertIn('require_installed_system', read(*f.split('/')), f)
+
     def test_ollama_local_only_by_default(self):
         self.assertIn('OLLAMA_HOST=127.0.0.1:11434', read('ai', 'setup-ai.sh'))
 

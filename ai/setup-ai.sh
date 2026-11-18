@@ -4,6 +4,10 @@
 # Everything stays local: Ollama listens on 127.0.0.1 only. Not yet tested on real hardware.
 set -euo pipefail
 [ "$(id -u)" -ne 0 ] || { echo "Run as a normal user (the script uses sudo)."; exit 1; }
+# shellcheck source=/dev/null
+. "$(dirname "$0")/../lib.sh"
+require_installed_system
+sync_pacman_once
 HERE="$(cd "$(dirname "$0")" && pwd)"
 RAM_GB=$(awk '/MemTotal/ {printf "%d", $2/1024/1024}' /proc/meminfo)
 MEM_MAX=$(( RAM_GB * 70 / 100 ))

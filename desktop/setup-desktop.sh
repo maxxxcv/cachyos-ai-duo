@@ -3,6 +3,10 @@
 # Intel media drivers, sane power and memory defaults. Run as a normal user. Not yet tested on hardware.
 set -euo pipefail
 [ "$(id -u)" -ne 0 ] || { echo "Run as a normal user (the script uses sudo)."; exit 1; }
+# shellcheck source=/dev/null
+. "$(dirname "$0")/../lib.sh"
+require_installed_system
+sync_pacman_once
 HERE="$(cd "$(dirname "$0")" && pwd)"
 
 echo "== 1/4 packages =="
